@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bag</title>
+</head>
+<body>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0px;  
+            padding: 0px;
+        }
+
+    
+        .main {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0px auto;
+            width: 80vw;
+            height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            margin: 50px 100px;
+        }
+
+        img {
+            width: 150px;
+            height: 100px;
+        }
+
+        .item{
+            position: relative;
+            margin: 5px 10px;
+            padding: 3px 7px;
+            border: solid black 1px;
+            border-radius: 7px;
+        }
+
+        .count {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 3px;
+            left: 77%;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgb(157, 173, 245);
+            display: none;
+        }
+
+        h3 {
+            margin-bottom: 4px;
+        }
+
+        button {
+            width: 60px;
+            margin-top: 10px;
+            margin-bottom: 3px;
+        }
+        .remove {
+            float: left;
+        }
+        .add {
+            float: right;
+        }
+
+        .total {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .bag-container {
+            width: 70%;
+            height: 50%;
+            border: solid black 2px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            
+            
+        }
+
+        .bag {
+            padding: 3px 5px;
+        }
+
+        .sml-item {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            border: solid 1px black ;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+            padding: 0px 5px;
+            
+        }
+        .sml-item img {
+            /* position: absolute; */
+            width: 15%;
+            height: 90%;    
+        }
+
+        .sml-item h3 {
+            position: absolute;
+            left: 30%
+        }
+
+        .count-inBag {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            left: 77%;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            
+        }
+
+    </style>
+    <div class="main">
+        <div class="container">
+            <div class="item" id="1">
+                <img src="https://st.depositphotos.com/2121815/4176/i/600/depositphotos_41764645-stock-photo-snickers-chocolate-bar-isolated-on.jpg" alt="">
+                <h3>Snikers</h3>
+                <p>Price: <span class="price">20</span> AZN</p>
+                <button class="remove">-</button>
+                <button class="add">+</button>
+                <div class="count"><h4>0</h4></div>
+            </div>
+            <div class="item" id="2">
+                <img src="https://strgimgr.umico.az/sized/840/144392-7ee68f5201b9717378138b7a8f41caec.jpg" alt="">
+                <h3>Dirol</h3>
+                <p>Price: <span class="price">15</span> AZN</p>
+                <button class="remove">-</button>
+                <button class="add">+</button>
+                <div class="count"><h4>0</h4></div>
+            </div>
+            <div class="item" id="3">
+                <img src="https://sc04.alicdn.com/kf/Uf4e0d20c94934890bb58226ea5b1f467O.jpg" alt="">
+                <h3>Kitkat</h3>
+                <p>Price: <span class="price">25</span> AZN</p>
+                <button class="remove">-</button>
+                <button class="add">+</button>
+                <div class="count"><h4>0</h4></div>
+            </div>
+            <div class="item" id="4">
+                <img src="https://nordicexpatshop.com/media/catalog/product/cache/a75b4628650e2182ad447c229a356118/b/o/bounty-candy-bar-57gr.jpeg" alt="">
+                <h3>Bounty</h3>
+                <p>Price: <span class="price">20</span> AZN</p>
+                <button class="remove">-</button>
+                <button class="add">+</button>
+                <div class="count"><h4>0</h4></div>
+            </div>
+
+            
+        </div>
+
+        <h1>Bag</h1>
+       
+        <div class="bag-container">
+            <div class="bag">
+            </div>
+        <h2 class="total">Total: <span></span></h2>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        let sum = 0;
+        let bagItems;
+
+        let id1 = document.getElementById('1');
+        let id2 = document.getElementById('2');
+        let id3 = document.getElementById('3');
+        let id4 = document.getElementById('4');
+        let ids = [id1, id2, id3, id4]
+
+        let addBtns = document.querySelectorAll('.add');
+        let removeBtns = document.querySelectorAll('.remove');
+        let bag = document.querySelector('.bag');
+        let total = document.querySelector('.total');
+
+        removeBtns.forEach(btn => btn.disabled = true)   
+
+        addBtns.forEach(addBtn => addBtn.addEventListener('click', () => {
+            ids.forEach(id => {
+                if (id == addBtn.parentElement) {
+                    id.querySelector('h4').innerHTML = +id.querySelector('h4').innerHTML + 1;
+                    sum += +id.querySelector('.price').innerHTML;
+                    id.querySelector('.remove').disabled = false;
+                    
+                    let clone_id = id.cloneNode(true);
+                    clone_id.querySelectorAll('button').forEach(btn => btn.remove());
+                    clone_id.querySelector('p').remove();
+                    clone_id.querySelector('.count').remove();
+
+                    let div = document.createElement('div');
+                    let h4  = document.createElement('h4');
+                    h4.innerHTML = id.querySelector('h4').innerHTML;
+                    div.prepend('x');
+                    div.append(h4);
+                    div.classList.add('count-inBag')
+                    
+                    let p = document.createElement('p');
+                    let span = document.createElement('span');
+                    span.innerHTML = +id.querySelector('.price').innerHTML * h4.innerHTML
+                    p.innerHTML = ' AZN';
+                    p.prepend(span);
+                    span.classList.add('price-inBag')
+
+                    clone_id.classList.remove('item');
+                    clone_id.classList.add('sml-item');
+
+                    clone_id.append(div);
+                    clone_id.append(p);
+                    
+                    bagItems = document.querySelectorAll('.sml-item');
+                   
+                    if(bagItems.length > 0){
+                        let bagHasSameItem;
+                        bagItems.forEach(item => {
+                            if(item.id == id.id) {
+                                item.querySelector('h4').innerHTML = +item.querySelector('h4').innerHTML + 1;
+                                item.querySelector('.price-inBag').innerHTML = item.querySelector('h4').innerHTML * id.querySelector('.price').innerHTML
+                                bagHasSameItem = true;
+                            }
+                        })
+
+                        if(!bagHasSameItem) bag.appendChild(clone_id);
+                    } else bag.appendChild(clone_id);
+                };
+                
+            }); 
+            total.lastElementChild.innerHTML = sum;
+        }))
+        
+        removeBtns.forEach(removeBtn => removeBtn.addEventListener('click', () => {
+            ids.forEach(id => {
+                if (id == removeBtn.parentElement) {
+                    id.querySelector('h4').innerHTML = +id.querySelector('h4').innerHTML - 1;
+                    sum -= +id.querySelector('.price').innerHTML;
+                    (id.querySelector('h4').innerHTML > 0) ? id.querySelector('.remove').disabled = false : id.querySelector('.remove').disabled = true;
+
+                    bagItems.forEach(item => {
+                        if(item.querySelector('h4').innerHTML > 1) {
+                            if(item.id == id.id) {
+                                item.querySelector('h4').innerHTML = +item.querySelector('h4').innerHTML - 1;
+                                item.querySelector('.price-inBag').innerHTML = item.querySelector('.price-inBag').innerHTML - id.querySelector('.price').innerHTML
+                            }
+                        } else item.remove()
+                        
+                    })
+                    
+                }
+            });
+                    
+            total.lastElementChild.innerHTML = sum;
+            
+        }));
+
+
+    </script>
+</body>
+</html>
