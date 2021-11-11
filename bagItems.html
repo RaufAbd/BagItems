@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bag</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="test.js"></script>
+    <title>Document</title>
 </head>
 <body>
-    <style>
+     <style>
         * {
             box-sizing: border-box;
             margin: 0px;  
             padding: 0px;
         }
 
-    
+        body {
+            overflow: hidden;
+        }
+
         .main {
             position: relative;
             display: flex;
@@ -64,9 +71,11 @@
             margin-top: 10px;
             margin-bottom: 3px;
         }
+        
         .remove {
             float: left;
         }
+
         .add {
             float: right;
         }
@@ -81,11 +90,10 @@
             width: 70%;
             height: 50%;
             border: solid black 2px;
+            border-radius: 7px;
             display: flex;
             flex-direction: column;
             position: relative;
-            
-            
         }
 
         .bag {
@@ -97,15 +105,15 @@
             width: 100%;
             height: 80px;
             border: solid 1px black ;
+            border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 3px;
-            padding: 0px 5px;
-            
+            padding: 0px 5px;    
         }
+
         .sml-item img {
-            /* position: absolute; */
             width: 15%;
             height: 90%;    
         }
@@ -124,7 +132,6 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            
         }
 
     </style>
@@ -171,7 +178,7 @@
         <div class="bag-container">
             <div class="bag">
             </div>
-        <h2 class="total">Total: <span></span></h2>
+        <h2 class="total">Total: <span>0</span></h2>
         </div>
     </div>
 
@@ -180,23 +187,16 @@
 
     <script>
         let sum = 0;
-        let bagItems;
-
-        let id1 = document.getElementById('1');
-        let id2 = document.getElementById('2');
-        let id3 = document.getElementById('3');
-        let id4 = document.getElementById('4');
-        let ids = [id1, id2, id3, id4]
-
+        let mainItems = document.querySelectorAll('.item')
         let addBtns = document.querySelectorAll('.add');
         let removeBtns = document.querySelectorAll('.remove');
         let bag = document.querySelector('.bag');
         let total = document.querySelector('.total');
 
-        removeBtns.forEach(btn => btn.disabled = true)   
+        removeBtns.forEach(btn => btn.disabled = true);   
 
         addBtns.forEach(addBtn => addBtn.addEventListener('click', () => {
-            ids.forEach(id => {
+            mainItems.forEach(id => {
                 if (id == addBtn.parentElement) {
                     id.querySelector('h4').innerHTML = +id.querySelector('h4').innerHTML + 1;
                     sum += +id.querySelector('.price').innerHTML;
@@ -210,7 +210,7 @@
                     let div = document.createElement('div');
                     let h4  = document.createElement('h4');
                     h4.innerHTML = id.querySelector('h4').innerHTML;
-                    div.prepend('x');
+                    div.append('x');
                     div.append(h4);
                     div.classList.add('count-inBag')
                     
@@ -226,12 +226,11 @@
 
                     clone_id.append(div);
                     clone_id.append(p);
-                    
-                    bagItems = document.querySelectorAll('.sml-item');
                    
-                    if(bagItems.length > 0){
+                    if(document.querySelectorAll('.sml-item').length > 0){
                         let bagHasSameItem;
-                        bagItems.forEach(item => {
+
+                        document.querySelectorAll('.sml-item').forEach(item => {
                             if(item.id == id.id) {
                                 item.querySelector('h4').innerHTML = +item.querySelector('h4').innerHTML + 1;
                                 item.querySelector('.price-inBag').innerHTML = item.querySelector('h4').innerHTML * id.querySelector('.price').innerHTML
@@ -242,28 +241,28 @@
                         if(!bagHasSameItem) bag.appendChild(clone_id);
                     } else bag.appendChild(clone_id);
                 };
-                
             }); 
+
             total.lastElementChild.innerHTML = sum;
+            
         }))
         
+        
         removeBtns.forEach(removeBtn => removeBtn.addEventListener('click', () => {
-            ids.forEach(id => {
+            mainItems.forEach(id => {
                 if (id == removeBtn.parentElement) {
                     id.querySelector('h4').innerHTML = +id.querySelector('h4').innerHTML - 1;
                     sum -= +id.querySelector('.price').innerHTML;
                     (id.querySelector('h4').innerHTML > 0) ? id.querySelector('.remove').disabled = false : id.querySelector('.remove').disabled = true;
 
-                    bagItems.forEach(item => {
-                        if(item.querySelector('h4').innerHTML > 1) {
-                            if(item.id == id.id) {
+                    document.querySelectorAll('.sml-item').forEach(item => {
+                        if(item.id == id.id) {
+                            if(item.querySelector('h4').innerHTML > 1) {
                                 item.querySelector('h4').innerHTML = +item.querySelector('h4').innerHTML - 1;
                                 item.querySelector('.price-inBag').innerHTML = item.querySelector('.price-inBag').innerHTML - id.querySelector('.price').innerHTML
-                            }
-                        } else item.remove()
-                        
+                            } else item.remove()
+                        } 
                     })
-                    
                 }
             });
                     
@@ -271,7 +270,7 @@
             
         }));
 
-
     </script>
+    
 </body>
 </html>
